@@ -5,9 +5,13 @@ import java.util.List;
 import awynne.zyre.msg.ZyreMsg;
 
 /**
- * Java-based interface to Zyre.  Notes:
- * <li> This interface provides a higher level abstraction to <a href="https://github.com/zeromq/zyre/blob/master/bindings/jni/src/main/java/org/zeromq/zyre/Zyre.java">Zyre.java</a>
- * <li> Documentation for zyre can be found in <a href="https://github.com/zeromq/zyre/blob/master/src/zyre.c>zyre.c</a> 
+ * Java-based interface to Zyre.  The main difference from pure zyre 
+ * is that in zyre4j payloads are assumed to only have a single part 
+ * that is either a String or byte[].  Notes:
+ * <li> This interface provides a higher level abstraction to 
+ *      <a href="https://github.com/zeromq/zyre/blob/master/bindings/jni/src/main/java/org/zeromq/zyre/Zyre.java">Zyre.java</a>
+ * <li> Documentation for zyre can be found in 
+ *      <a href="https://github.com/zeromq/zyre/blob/master/src/zyre.c>zyre.c</a> 
  * <li> ZRE Protocol is documented <a href="http://rfc.zeromq.org/spec:20">here</>
  */
 public interface IZyre {
