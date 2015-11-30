@@ -164,11 +164,9 @@ public class ZyreNode implements IZyre {
 	@Override
 	public List<String> peerGroups() {
 		throw new UnsupportedOperationException();
-		/*
-		ArrayList<String> groups = new ArrayList<>();
-		ZList peerZlist = zyre.peerGroups();
-		return groups;
-		*/
+//		ArrayList<String> groups = new ArrayList<>();
+//		ZList peerZlist = zyre.peerGroups();
+//		return groups;
 	}
 
 	@Override
@@ -192,17 +190,18 @@ public class ZyreNode implements IZyre {
 	}
 
 	@Override
-	public void setInterval(int intervalMs) {
-		throw new UnsupportedOperationException();
+	public void setInterval(long intervalMs) {
+		zyre.setInterval(intervalMs);
+
 	}
 
 	@Override
 	public void setPort(int port) {
-		throw new UnsupportedOperationException();
+		zyre.setPort(port);
 	}
 
 	@Override
 	public void setInterface(String intf) {
-		throw new UnsupportedOperationException();
+		zyre.setInterface(intf);
 	}
 }

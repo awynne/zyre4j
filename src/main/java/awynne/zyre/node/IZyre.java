@@ -78,7 +78,7 @@ public interface IZyre {
 	 * Set interval between sends of discovery beacon. 
 	 * @param intervalMs Interval, in ms. Default is 1000 ms.
 	 */
-	public void setInterval(int intervalMs);
+	public void setInterval(long intervalMs);
 	
 	/**
 	 * Set port on which to receive discovery beacon.
