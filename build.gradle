@@ -79,20 +79,7 @@ dependencies {
 
 test {
     systemProperties = System.getProperties()
-    systemProperties['java.library.path'] = "./dist/native/${platform}"
-}
-
-/*
- * Configuration and tasks to copy native libraries into
- * the distribution zip
- */
-
-distZip {
-    dependsOn {[copyNative]}
-
-    into("$artifactBase") {
-        from "./dist"
-    }
+    systemProperties['java.library.path'] = "./native/${platform}"
 }
 
 task copyNativeOSX(type: Copy) {
@@ -104,7 +91,7 @@ task copyNativeOSX(type: Copy) {
     include "libczmq.dylib"
     include "libzyre.dylib"
     include "libzyre-jni.dylib"
-    into "./dist/native/${platform}"
+    into "./native/${platform}"
 }
 
 task copyNativeLinux(type: Copy) {
@@ -117,7 +104,7 @@ task copyNativeLinux(type: Copy) {
     include "libzyre.so"
     include "libzyrejni.so"
     include "libczmqjni.so"
-    into "./dist/native/${platform}"
+    into "./native/${platform}"
 }
 
 /*
@@ -128,7 +115,7 @@ task copyNativeWin(type: Copy) {
     include "czmq.dll"
     include "zyre.dll"
     include "zyre-jni.dll"
-    into "./dist/native/${platform}"
+    into "./native/${platform}"
 }
 */
 
