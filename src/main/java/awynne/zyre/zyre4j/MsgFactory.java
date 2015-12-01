@@ -1,7 +1,11 @@
-package awynne.zyre.msg;
+package awynne.zyre.zyre4j;
 
-import static awynne.zyre.msg.ZyreMsg.*;
+import static awynne.zyre.zyre4j.ZyreMsg.*;
 
+/**
+ * Used to create ZyreMsg objects for each type of 
+ * Zyre event
+ */
 public class MsgFactory {
 	
 	public ZyreMsg createEnter(String peer, String peerName) {

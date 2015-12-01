@@ -1,6 +1,6 @@
-package awynne.zyre.node;
+package awynne.zyre.zyre4j;
 
-import static awynne.zyre.msg.ZyreMsg.*;
+import static awynne.zyre.zyre4j.ZyreMsg.*;
 
 import java.util.List;
 
@@ -8,9 +8,11 @@ import org.zeromq.czmq.ZFrame;
 import org.zeromq.czmq.ZMsg;
 import org.zeromq.zyre.Zyre;
 
-import awynne.zyre.msg.MsgFactory;
-import awynne.zyre.msg.ZyreMsg;
-
+/**
+ * <p>Concrete implementation of a high level zyre node. 
+ * Implementation Notes:
+ * <li> the stop() method calls zyre.stop() and then zyre.close()
+ */
 public class ZyreNode implements IZyre {
 	
 	protected Zyre zyre;
@@ -34,7 +36,7 @@ public class ZyreNode implements IZyre {
 			zyre.close();
 		} 
 		catch (InterruptedException e) { 
-			// do nothing
+			// sleep interrupted, do nothing
 		}
 	}
 
@@ -166,6 +168,7 @@ public class ZyreNode implements IZyre {
 		throw new UnsupportedOperationException();
 //		ArrayList<String> groups = new ArrayList<>();
 //		ZList peerZlist = zyre.peerGroups();
+		// TODO: populate List object with groups from Zlist
 //		return groups;
 	}
 
@@ -175,6 +178,7 @@ public class ZyreNode implements IZyre {
 		/*
 		ArrayList<String> groups = new ArrayList<>();
 		ZList peerZlist = zyre.ownGroups();
+		// TODO: populate List object with groups from Zlist
 		return groups;
 		*/
 	}
@@ -185,6 +189,7 @@ public class ZyreNode implements IZyre {
 		/*
 		ArrayList<String> peers = new ArrayList<>();
 		ZList peerZlist = zyre.peers();
+		// TODO: populate List object with groups from Zlist
 		return peers;
 		*/
 	}

@@ -90,7 +90,8 @@ task copyNativeOSX(type: Copy) {
     include "libzmq.dylib"
     include "libczmq.dylib"
     include "libzyre.dylib"
-    include "libzyre-jni.dylib"
+    include "libczmqjni.dylib"
+    include "libzyrejni.dylib"
     into "./native/${platform}"
 }
 

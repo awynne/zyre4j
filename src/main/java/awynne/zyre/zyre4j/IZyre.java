@@ -1,18 +1,18 @@
-package awynne.zyre.node;
+package awynne.zyre.zyre4j;
 
 import java.util.List;
 
-import awynne.zyre.msg.ZyreMsg;
-
 /**
- * Java-based interface to Zyre.  The main difference from pure zyre 
- * is that in zyre4j payloads are assumed to only have a single part 
- * that is either a String or byte[].  Notes:
+ * High level Java interface for a Zyre node.  The main difference 
+ * from pure zyre is that in zyre4j payloads are assumed to only 
+ * have a single part that is either a String or byte[].  Notes:
  * <li> This interface provides a higher level abstraction to 
  *      <a href="https://github.com/zeromq/zyre/blob/master/bindings/jni/src/main/java/org/zeromq/zyre/Zyre.java">Zyre.java</a>
  * <li> Documentation for zyre can be found in 
  *      <a href="https://github.com/zeromq/zyre/blob/master/src/zyre.c>zyre.c</a> 
  * <li> ZRE Protocol is documented <a href="http://rfc.zeromq.org/spec:20">here</>
+ * <li> java.util.List objects are used for simplicity to 
+ *      return collections of groups and peers
  */
 public interface IZyre {
 	

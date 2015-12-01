@@ -11,8 +11,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import awynne.zyre.msg.ZyreMsg;
-import awynne.zyre.node.ZyreNode;
+import awynne.zyre.zyre4j.ZyreMsg;
+import awynne.zyre.zyre4j.ZyreNode;
 
 /**
  * Tests the SHOUT-WHISPER "pattern" in which a single requester sends a 
