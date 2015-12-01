@@ -32,6 +32,8 @@ public class PingPongTest {
 
 	@Test
 	public void test() throws Exception {
+		
+		System.out.println("java.library.path: " + System.getProperty("java.library.path"));
 
 		reqThread = new Requester("requester");
 		respThread = new Responder("responder");

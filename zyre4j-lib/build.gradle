@@ -1,0 +1,117 @@
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+/*
+ * Platform labels
+ */
+
+def final PLAT_OSX = "osx"
+def final PLAT_X64_LINUX = "x64linux"
+def final PLAT_X64_WINDOWS = "x64windows"
+
+/*
+ * Define some local variables for paths on each platform
+ */
+
+def czmqJni = new File("${projectDir}/../../czmq/bindings/czmq-jni").absolutePath
+def zyreJni = new File("${projectDir}/../../zyre/bindings/jni").absolutePath
+def systemLibs = new File("/usr/local/lib").absolutePath
+def nativePath = new File("${projectDir}/native").absolutePath
+
+/*
+ * Determine platform from java "os.name" property. Use this 
+ * information to set native library paths
+ */
+
+def os = System.properties['os.name'].toLowerCase()
+def platform
+
+if (os.contains("mac")) { 
+    platform = PLAT_OSX
+}
+else if (os.contains("linux")) { 
+    platform = PLAT_X64_LINUX
+}
+else if (os.contains("windows")) { 
+    platform = PLAT_X64_WINDOWS
+}
+else { 
+    throw new RuntimeException("platform not supported: $os")    
+}
+
+dependencies {
+    compile 'org.slf4j:slf4j-api:1.7.12'
+    compile 'ch.qos.logback:logback-classic:1.1.3'
+    compile "org.zeromq:zyre-jni:0.1.0-SNAPSHOT"
+    compile "org.zeromq:czmq-jni:0.1.0-SNAPSHOT"
+    
+    // test
+    testCompile 'junit:junit:4.12'
+}
+
+/*
+ *  Configure native properties for tests to be able to run
+ *  on each platform
+ */
+
+test {
+    systemProperties = System.getProperties()
+    systemProperties['java.library.path'] = "$nativePath"
+}
+
+task copyNativeOSX(type: Copy) {
+    from "$czmqJni"
+    from "$zyreJni"
+    from "$systemLibs"
+    include "libsodium.dylib"
+    include "libzmq.dylib"
+    include "libczmq.dylib"
+    include "libzyre.dylib"
+    include "libczmqjni.dylib"
+    include "libzyrejni.dylib"
+    into "$nativePath"
+}
+
+task copyNativeLinux(type: Copy) {
+    from "$czmqJni"
+    from "$zyreJni"
+    from "$systemLibs"
+    include "libsodium.so"
+    include "libzmq.so"
+    include "libczmq.so"
+    include "libzyre.so"
+    include "libzyrejni.so"
+    include "libczmqjni.so"
+    into "$nativePath"
+}
+
+/*
+task copyNativeWin(type: Copy) {
+    //from "$zyrejniWinNative"
+    include "libsodium.dll"
+    include "libzmq.dll"
+    include "czmq.dll"
+    include "zyre.dll"
+    include "zyre-jni.dll"
+    into "./native"
+}
+*/
+
+task copyNative() {
+    doLast {
+        if (platform.equals(PLAT_OSX)) 
+            copyNativeOSX.execute()
+        else if (platform.equals(PLAT_X64_LINUX)) 
+            copyNativeLinux.execute()
+        /* else if (platform.equals(PLAT_X64_WINDOWS)) 
+            copyNativeWin.execute() */
+        else {
+            throw new RuntimeException("copy native for $platform not supported yet")
+        }
+    }
+}
+
+
+
+

@@ -71,7 +71,7 @@ public class Chat extends Thread {
 	public static void main(String[] args) throws Exception {
 
 		if (args.length < 1) {
-			out.println("syntax: Chat myname");
+			out.println("syntax: chat myname");
 			exit(0);
 		}
 
