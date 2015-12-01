@@ -51,12 +51,12 @@ public class ZyreNode implements IZyre {
 	}
 
 	@Override
-	public ZyreMsg recv() {
+	public ZyreMsg recv() throws InterruptedException {
 		return recv(true);
 	}
 	
 	@Override
-	public ZyreMsg recvb() {
+	public ZyreMsg recvb() throws InterruptedException {
 		return recv(false);
 	}
 	
@@ -66,10 +66,10 @@ public class ZyreNode implements IZyre {
 	 * to be a String, false if byte[] payload is expected
 	 * @return The received ZyreMsg or null if interrupted
 	 */
-	protected ZyreMsg recv(boolean expectString) {
+	protected ZyreMsg recv(boolean expectString) throws InterruptedException {
 		ZMsg zmsg = zyre.recv();
 		if (zmsg == null) {
-			return null;
+			throw new InterruptedException("Interrupted during zyre.recv()");
 		}
 
 		String event = zmsg.popstr();
@@ -102,6 +102,9 @@ public class ZyreNode implements IZyre {
 			break;
 		case EV_STOP:
 			zyreMsg = fact.createStop(peer, peerName);
+			break;
+		case EV_EVASIVE:
+			zyreMsg = fact.createEnter(peer, peerName);
 			break;
 		default:
 			throw new RuntimeException("Unknown event type: " + event);

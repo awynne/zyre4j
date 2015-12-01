@@ -32,7 +32,8 @@ public class ShoutWhisperTest {
 	private Requester reqThread;
 	private List<Responder> respThreads = new ArrayList<Responder>();
 	
-	private boolean passed = true;
+	private int expected = NUM_MSGS * NUM_RESP;
+	private int totResponses = 0;
 
 	@Test
 	public void test() throws Exception {
@@ -68,7 +69,8 @@ public class ShoutWhisperTest {
 		// leave some time for resources to be freed
 		Thread.sleep(200);
 		
-		assertTrue(passed);
+		log.info("received: " + totResponses + " expected: " + expected);
+		assertTrue(totResponses == expected);
 	}
 	
 	/**
@@ -85,63 +87,58 @@ public class ShoutWhisperTest {
 
 			// wait for responders to join
 			while (true) {
-				ZyreMsg zyreMsg = zyre.recv();
-				
-				String event = zyreMsg.getEvent();
-				String peer = zyreMsg.getPeer();
-				String name = zyreMsg.getPeerName();
+				try {
+					ZyreMsg zyreMsg = zyre.recv();
+					
+					String event = zyreMsg.getEvent();
+					String peer = zyreMsg.getPeer();
+					String name = zyreMsg.getPeerName();
 
-				if (event.equals("JOIN")) {
-					if (peer == null) {
-						log.error("Peer is null");
-						passed = false;
-						return;
+					if (event.equals("JOIN")) {
+						joinCt++;
+						log.info("responder joined: " + name + " (" + peer + ")");
+								
+						if (joinCt == NUM_RESP) {
+							log.info("All responders joined: " + NUM_RESP);
+							break;
+						}
 					}
-					joinCt++;
-					log.info("responder joined: " + name + " (" + peer + ")");
-							
-					if (joinCt == NUM_RESP) {
-						log.info("All responders joined: " + NUM_RESP);
-						break;
-					}
+				} 
+				catch (InterruptedException e) {
+					break;
 				}
 			}
 
 			try { Thread.sleep(200); } 
 			catch (InterruptedException e) { e.printStackTrace(); }
 
+			// Send PINGs
 			log.info("sending ping(s) via SHOUT: " + NUM_MSGS);
 			for (int i=0; i < NUM_MSGS; i++) {
 				zyre.shout(GROUP, PING);
 			}
-			
-			int expected = NUM_RESP * NUM_MSGS;
-			int recvCt = 0;
 
+			// Collect response PONGs
 			while(true) {
-				ZyreMsg zyreMsg = zyre.recv();
-				String event = zyreMsg.getEvent();
-				String name = zyreMsg.getPeerName();
-				
-				if (event.equals("WHISPER")) {
-					String msg = zyreMsg.getPayload();
-					log.info("requester received response: <" + msg + "> from: " + name);
+				try {
+					ZyreMsg zyreMsg = zyre.recv();
+					String event = zyreMsg.getEvent();
+					String name = zyreMsg.getPeerName();
+					
+					if (event.equals("WHISPER")) {
+						String msg = zyreMsg.getPayload();
+						log.info("requester received response: <" + msg + "> from: " + name);
 
-					if (!msg.equals(PONG)) {
-						log.error("Did not receive PONG.  Message was: " + msg);
-						passed = false;
+						if (msg.equals(PONG)) {
+							totResponses++;
+						}
+						if (totResponses == expected) {
+							break;
+						}
 					}
-					recvCt++;
-					if (recvCt == expected) {
-						log.info("received all messages: " + expected);
-						break;
-					}
-					else {
-						log.info("received: " + recvCt + " expected: " + expected);
-					}
-				}
-				else {
-					log.info("ignoring event: "  + event);
+				} 
+				catch (InterruptedException e) {
+					break;
 				}
 			}
 		}
@@ -154,30 +151,33 @@ public class ShoutWhisperTest {
 		}
 		
 		public void run() {
-			int sentCt = 0;
+			int pingCt = 0;
 
-			while(!Thread.currentThread().isInterrupted()) {
-				ZyreMsg zyreMsg = zyre.recv();
-				
-				String event = zyreMsg.getEvent();
-				String peer = zyreMsg.getPeer();
-				
-				if (event.equals("SHOUT")){
-					String group = zyreMsg.getGroup();
-					assertEquals(group, GROUP);
-					String msg = zyreMsg.getPayload();
-					if (!msg.equals(PING)) {
-						log.error("Did not receive PING. Message was: " + msg);
-						passed = false;
-					}
+			while(true) {
+				try {
+					ZyreMsg zyreMsg = zyre.recv();
 					
-					log.info("sending pong");
-					zyre.whisper(peer, PONG);
-					sentCt++;
-					if (sentCt == NUM_MSGS) { 
-						break; 
+					String event = zyreMsg.getEvent();
+					String peer = zyreMsg.getPeer();
+					
+					if (event.equals("SHOUT")){
+						String msg = zyreMsg.getPayload();
+						if (!msg.equals(PING)) {
+							log.error("Did not receive PING. Message was: " + msg);
+							break;
+						}
+						
+						log.info("sending pong");
+						zyre.whisper(peer, PONG);
+						if (++pingCt == NUM_MSGS) {
+							break;
+						}
 					}
+				} 
+				catch (InterruptedException e) {
+					break;
 				}
+
 			}
 		}
 	}

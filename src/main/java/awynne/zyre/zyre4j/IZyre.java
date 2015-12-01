@@ -28,11 +28,13 @@ public interface IZyre {
 	/** Leave the named group */
 	public void leave(String group);
 	
-	/** Receive a ZyreMsg containing a String payload */
-	public ZyreMsg recv();
+	/** Receive a ZyreMsg containing a String payload 
+	 * @throws InterruptedException */
+	public ZyreMsg recv() throws InterruptedException;
 	
-	/** Receive a ZyreMsg containing a byte[] payload */
-	public ZyreMsg recvb();
+	/** Receive a ZyreMsg containing a byte[] payload 
+	 * @throws InterruptedException */
+	public ZyreMsg recvb() throws InterruptedException;
 
 	/** 
 	 * Multicast send to the named group 
