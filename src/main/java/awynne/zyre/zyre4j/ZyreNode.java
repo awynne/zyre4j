@@ -60,8 +60,18 @@ public class ZyreNode implements IZyre {
 		return recv(false);
 	}
 	
+	/**
+	 * Receive a ZyreMsg, block if none 
+	 * @param expectString True if the caller expects the payload
+	 * to be a String, false if byte[] payload is expected
+	 * @return The received ZyreMsg or null if interrupted
+	 */
 	protected ZyreMsg recv(boolean expectString) {
 		ZMsg zmsg = zyre.recv();
+		if (zmsg == null) {
+			return null;
+		}
+
 		String event = zmsg.popstr();
 		String peer = zmsg.popstr();
 		String peerName = zmsg.popstr();
@@ -89,6 +99,9 @@ public class ZyreNode implements IZyre {
 			break;
 		case EV_WHISPER:
 			zyreMsg = this.createWhisper(expectString, peer, peerName, zmsg);
+			break;
+		case EV_STOP:
+			zyreMsg = fact.createStop(peer, peerName);
 			break;
 		default:
 			throw new RuntimeException("Unknown event type: " + event);

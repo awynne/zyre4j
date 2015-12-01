@@ -3,13 +3,10 @@ package awynne.zyre.test;
 
 import static org.junit.Assert.assertTrue;
 
-import java.io.UnsupportedEncodingException;
-
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import awynne.zyre.zyre4j.MsgFactory;
 import awynne.zyre.zyre4j.ZyreMsg;
 import awynne.zyre.zyre4j.ZyreNode;
 
@@ -31,8 +28,6 @@ public class PingPongTest {
 	
 	private boolean passed = true;
 	
-	private MsgFactory fact = new MsgFactory();
-
 	@Test
 	public void test() throws Exception {
 		

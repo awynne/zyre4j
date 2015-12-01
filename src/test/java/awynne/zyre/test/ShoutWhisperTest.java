@@ -3,7 +3,6 @@ package awynne.zyre.test;
 
 import static org.junit.Assert.*;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 

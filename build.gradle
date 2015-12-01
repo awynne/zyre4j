@@ -79,7 +79,7 @@ dependencies {
 
 test {
     systemProperties = System.getProperties()
-    systemProperties['java.library.path'] = "./native/${platform}"
+    systemProperties['java.library.path'] = "./native"
 }
 
 task copyNativeOSX(type: Copy) {
@@ -92,7 +92,7 @@ task copyNativeOSX(type: Copy) {
     include "libzyre.dylib"
     include "libczmqjni.dylib"
     include "libzyrejni.dylib"
-    into "./native/${platform}"
+    into "./native"
 }
 
 task copyNativeLinux(type: Copy) {
@@ -105,7 +105,7 @@ task copyNativeLinux(type: Copy) {
     include "libzyre.so"
     include "libzyrejni.so"
     include "libczmqjni.so"
-    into "./native/${platform}"
+    into "./native"
 }
 
 /*
@@ -116,7 +116,7 @@ task copyNativeWin(type: Copy) {
     include "czmq.dll"
     include "zyre.dll"
     include "zyre-jni.dll"
-    into "./native/${platform}"
+    into "./native"
 }
 */
 

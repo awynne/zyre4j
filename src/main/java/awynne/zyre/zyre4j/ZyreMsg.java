@@ -25,17 +25,20 @@ public class ZyreMsg {
 	public static final String EV_JOIN = "JOIN";
 	public static final String EV_LEAVE = "LEAVE";
 	public static final String EV_EXIT = "EXIT";
-
+	public static final String EV_EVASIVE = "EVASIVE";
 	public static final String EV_SHOUT = "SHOUT";
 	public static final String EV_WHISPER = "WHISPER";
+	public static final String EV_STOP = "STOP";
 
 	protected String event = null;
 	protected String peer = "";
 	protected String peerName = "";
 	protected String group = "";
+	
+	protected Object payload = null;
 
-	protected String payload = "";
-	protected byte[] payloadb = new byte[0];
+	//protected String payload = "";
+	//protected byte[] payloadb = new byte[0];
 	
 	protected ZyreMsg() {
 	}
@@ -53,9 +56,9 @@ public class ZyreMsg {
 		return group;
 	}
 	public String getPayload() {
-		return payload;
+		return (String) payload;
 	}
-	public byte[] getPayloadb() {
-		return payloadb;
+	public byte[] getPayloadAsBytes() {
+		return (byte[]) payload;
 	}
 }
