@@ -7,6 +7,17 @@ dependencies {
     compile project(':zyre4j-lib')
 }
 
+def artifactBase = "${project.name}-${project.version}"
+
+distZip {
+//  dependsOn {[copyNative]}
+
+    into("${artifactBase}/native") {
+        from "${project(':zyre4j-lib').projectDir}/native"
+    }
+}
+
+
 /*
  * Modify the start scripts so that we can set the java.library.path
  * from our custom launcher scripts
