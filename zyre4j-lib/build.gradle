@@ -16,7 +16,6 @@ def final PLAT_X64_WINDOWS = "x64windows"
 
 def czmqJni = new File("${projectDir}/../../czmq/bindings/czmq-jni").absolutePath
 def zyreJni = new File("${projectDir}/../../zyre/bindings/jni").absolutePath
-def systemLibs = new File("/usr/local/lib").absolutePath
 def nativePath = new File("${projectDir}/native").absolutePath
 
 /*
@@ -26,18 +25,21 @@ def nativePath = new File("${projectDir}/native").absolutePath
 
 def os = System.properties['os.name'].toLowerCase()
 def platform
+def systemLibs
 
 if (os.contains("mac")) { 
     platform = PLAT_OSX
+	systemLibs = "/usr/local/lib"
 }
 else if (os.contains("linux")) { 
     platform = PLAT_X64_LINUX
+	systemLibs = "/usr/local/lib"
 }
 else if (os.contains("windows")) { 
     platform = PLAT_X64_WINDOWS
 }
 else { 
-    throw new RuntimeException("platform not supported: $os")    
+    throw new RuntimeException("os not supported: $os")    
 }
 
 dependencies {
