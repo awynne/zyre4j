@@ -23,6 +23,11 @@ public class Chat extends Thread {
 		node = new ZyreNode(name);
 	}
 
+	public Chat(String name, String intf) {
+		this(name);
+		node.setInterface(intf);
+	}
+
 	public void run() {
 		if (node == null) {
 			throw new RuntimeException("Could not create ZyreNode");
@@ -71,11 +76,17 @@ public class Chat extends Thread {
 	public static void main(String[] args) throws Exception {
 
 		if (args.length < 1) {
-			out.println("syntax: chat myname");
+			out.println("syntax: chat myname | chat myname interface");
 			exit(0);
 		}
+		Chat chat;
+		if (args.length == 1) {
+			chat = new Chat(args[0]);
+		}
+		else {
+			chat = new Chat(args[0], args[1]);
+		}
 
-		Chat chat = new Chat(args[0]);
 		chat.start();
 		Scanner scanner = new Scanner(in);
 
