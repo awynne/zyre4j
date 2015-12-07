@@ -8,6 +8,7 @@ import java.util.List;
 import org.zeromq.czmq.Zframe;
 import org.zeromq.czmq.Zlist;
 import org.zeromq.czmq.Zmsg;
+import org.zeromq.czmq.Zstr;
 import org.zeromq.zyre.Zyre;
 
 /**
@@ -186,32 +187,22 @@ public class ZyreNode implements IZyre {
 
 	@Override
 	public List<String> peerGroups() {
-		ArrayList<String> groups = new ArrayList<>();
-		Zlist peerZlist = zyre.peerGroups();
-		// TODO: populate List object with groups from Zlist
-		return groups;
+		return toStringList( zyre.peerGroups() );
 	}
 
 	@Override
 	public List<String> ownGroups() {
-		ArrayList<String> groups = new ArrayList<>();
-		Zlist peerZlist = zyre.ownGroups();
-		// TODO: populate List object with groups from Zlist
-		return groups;
+		return toStringList( zyre.ownGroups() );
 	}
 
 	@Override
 	public List<String> peers() {
-		ArrayList<String> peers = new ArrayList<>();
-		Zlist peerZlist = zyre.peers();
-		// TODO: populate List object with groups from Zlist
-		return peers;
+		return toStringList( zyre.peers()) ;
 	}
 
 	@Override
 	public void setInterval(long intervalMs) {
 		zyre.setInterval(intervalMs);
-
 	}
 
 	@Override
@@ -242,5 +233,18 @@ public class ZyreNode implements IZyre {
 	@Override
 	public String uuid() {
 		return zyre.uuid();
+	}
+	
+	private List<String> toStringList(Zlist zlist) {
+		ArrayList<String> jlist = new ArrayList<>();
+		
+		long ptr = zlist.first();
+		while (ptr > 0) {
+			Zstr zstr = new Zstr(ptr);
+			jlist.add(zstr.toString());
+			ptr = zlist.next();
+		}
+		
+		return jlist;
 	}
 }
