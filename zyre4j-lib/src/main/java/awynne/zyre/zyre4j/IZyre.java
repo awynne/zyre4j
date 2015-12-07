@@ -95,5 +95,13 @@ public interface IZyre {
 	 * @param intf Name of the interface
 	 */
 	public void setInterface(String intf);
+	
+	public String peerAddress(String peer);
+	
+	public String peerHeaderValue(String peer, String key);
+	
+	public void setHeader(String key, String value);
+	
+	public String uuid();
 }
 

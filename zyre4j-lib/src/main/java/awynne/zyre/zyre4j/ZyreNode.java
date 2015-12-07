@@ -2,10 +2,12 @@ package awynne.zyre.zyre4j;
 
 import static awynne.zyre.zyre4j.ZyreMsg.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.zeromq.czmq.ZFrame;
-import org.zeromq.czmq.ZMsg;
+import org.zeromq.czmq.Zframe;
+import org.zeromq.czmq.Zlist;
+import org.zeromq.czmq.Zmsg;
 import org.zeromq.zyre.Zyre;
 
 /**
@@ -18,6 +20,8 @@ public class ZyreNode implements IZyre {
 	protected Zyre zyre;
 	protected MsgFactory fact;
 	
+	protected long ptr = Long.MAX_VALUE;
+	
 	public ZyreNode(String name) {
 		zyre = new Zyre(name);
 		fact = new MsgFactory();
@@ -25,7 +29,8 @@ public class ZyreNode implements IZyre {
 
 	@Override
 	public boolean start() {
-		return zyre.start();
+		int ret = zyre.start();
+		return (ret == 0);
 	}
 
 	@Override
@@ -67,7 +72,7 @@ public class ZyreNode implements IZyre {
 	 * @return The received ZyreMsg or null if interrupted
 	 */
 	protected ZyreMsg recv(boolean expectString) throws InterruptedException {
-		ZMsg zmsg = zyre.recv();
+		Zmsg zmsg = zyre.recv();
 		if (zmsg == null) {
 			throw new InterruptedException("Interrupted during zyre.recv()");
 		}
@@ -114,7 +119,7 @@ public class ZyreNode implements IZyre {
 		return zyreMsg;
 	}
 	
-	private ZyreMsg createShout(boolean expectString, String peer, String peerName, ZMsg zmsg) {
+	private ZyreMsg createShout(boolean expectString, String peer, String peerName, Zmsg zmsg) {
 		ZyreMsg zyreMsg;
 		String group = zmsg.popstr();
 
@@ -123,7 +128,7 @@ public class ZyreNode implements IZyre {
 			zyreMsg = fact.createShout(peer, peerName, group, payload);
 		}
 		else {
-			ZFrame zframe = zmsg.pop();
+			Zframe zframe = zmsg.pop();
 			byte[] payload = zframe.data();
 			zyreMsg = fact.createShout(peer, peerName, group, payload);
 		}
@@ -132,7 +137,7 @@ public class ZyreNode implements IZyre {
 
 	}
 	
-	private ZyreMsg createWhisper(boolean expectString, String peer, String peerName, ZMsg zmsg) {
+	private ZyreMsg createWhisper(boolean expectString, String peer, String peerName, Zmsg zmsg) {
 		ZyreMsg zyreMsg;
 		
 		if (expectString) {
@@ -140,7 +145,7 @@ public class ZyreNode implements IZyre {
 			zyreMsg = fact.createWhisper(peer, peerName, payload);
 		}
 		else {
-			ZFrame zframe = zmsg.pop();
+			Zframe zframe = zmsg.pop();
 			byte[] payload = zframe.data();
 			zyreMsg = fact.createWhisper(peer, peerName, payload);
 		}
@@ -155,8 +160,8 @@ public class ZyreNode implements IZyre {
 
 	@Override
 	public void shout(String group, byte[] payload) {
-		ZFrame zframe = new ZFrame(payload);
-		ZMsg zmsg = new ZMsg();
+		Zframe zframe = new Zframe(payload, payload.length);
+		Zmsg zmsg = new Zmsg();
 		zmsg.append(zframe);
 		zyre.shout(group, zmsg);
 	}
@@ -168,8 +173,8 @@ public class ZyreNode implements IZyre {
 
 	@Override
 	public void whisper(String peer, byte[] payload) {
-		ZFrame zframe = new ZFrame(payload);
-		ZMsg zmsg = new ZMsg();
+		Zframe zframe = new Zframe(payload, payload.length);
+		Zmsg zmsg = new Zmsg();
 		zmsg.append(zframe);
 		zyre.whisper(peer, zmsg);
 	}
@@ -181,33 +186,26 @@ public class ZyreNode implements IZyre {
 
 	@Override
 	public List<String> peerGroups() {
-		throw new UnsupportedOperationException();
-//		ArrayList<String> groups = new ArrayList<>();
-//		ZList peerZlist = zyre.peerGroups();
+		ArrayList<String> groups = new ArrayList<>();
+		Zlist peerZlist = zyre.peerGroups();
 		// TODO: populate List object with groups from Zlist
-//		return groups;
+		return groups;
 	}
 
 	@Override
 	public List<String> ownGroups() {
-		throw new UnsupportedOperationException();
-		/*
 		ArrayList<String> groups = new ArrayList<>();
-		ZList peerZlist = zyre.ownGroups();
+		Zlist peerZlist = zyre.ownGroups();
 		// TODO: populate List object with groups from Zlist
 		return groups;
-		*/
 	}
 
 	@Override
 	public List<String> peers() {
-		throw new UnsupportedOperationException();
-		/*
 		ArrayList<String> peers = new ArrayList<>();
-		ZList peerZlist = zyre.peers();
+		Zlist peerZlist = zyre.peers();
 		// TODO: populate List object with groups from Zlist
 		return peers;
-		*/
 	}
 
 	@Override
@@ -224,5 +222,25 @@ public class ZyreNode implements IZyre {
 	@Override
 	public void setInterface(String intf) {
 		zyre.setInterface(intf);
+	}
+
+	@Override
+	public String peerAddress(String peer) {
+		return zyre.peerAddress(peer);
+	}
+
+	@Override
+	public String peerHeaderValue(String peer, String key) {
+		return zyre.peerHeaderValue(peer, key);
+	}
+
+	@Override
+	public void setHeader(String key, String value) {
+		zyre.setHeader(key, value);
+	}
+
+	@Override
+	public String uuid() {
+		return zyre.uuid();
 	}
 }
