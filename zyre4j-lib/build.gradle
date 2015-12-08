@@ -14,7 +14,7 @@ def final PLAT_X64_WINDOWS = "x64windows"
  * Define some local variables for paths on each platform
  */
 
-def czmqJni = new File("${projectDir}/../../czmq/bindings/czmq-jni").absolutePath
+def czmqJni = new File("${projectDir}/../../czmq/bindings/jni").absolutePath
 def zyreJni = new File("${projectDir}/../../zyre/bindings/jni").absolutePath
 def nativePath = new File("${projectDir}/native").absolutePath
 

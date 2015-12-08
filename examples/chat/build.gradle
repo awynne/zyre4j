@@ -10,8 +10,6 @@ dependencies {
 def artifactBase = "${project.name}-${project.version}"
 
 distZip {
-//  dependsOn {[copyNative]}
-
     into("${artifactBase}/native") {
         from "${project(':zyre4j-lib').projectDir}/native"
     }

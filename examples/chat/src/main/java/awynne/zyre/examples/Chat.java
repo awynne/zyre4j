@@ -34,6 +34,8 @@ public class Chat extends Thread {
 		}
 		node.start();
 		node.join(CHAT_GRP);
+		
+		System.out.println("groups: "+node.ownGroups());
 
 		while(!terminated) {
 			try {

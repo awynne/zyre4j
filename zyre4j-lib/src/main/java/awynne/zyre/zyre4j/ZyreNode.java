@@ -240,8 +240,8 @@ public class ZyreNode implements IZyre {
 		
 		long ptr = zlist.first();
 		while (ptr > 0) {
-			Zstr zstr = new Zstr(ptr);
-			jlist.add(zstr.toString());
+			String str = new Zstr().str(ptr);
+			jlist.add(str);
 			ptr = zlist.next();
 		}
 		
