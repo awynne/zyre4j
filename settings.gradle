@@ -1,6 +1,6 @@
 
 rootProject.name = 'zyre4j'
 
-include 'zyre4j-lib'
+include 'zyre4j-core'
 include 'examples:chat'
 include 'examples:chat-plus'

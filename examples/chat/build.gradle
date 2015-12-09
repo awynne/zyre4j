@@ -4,14 +4,14 @@ apply plugin: 'application'
 mainClassName = "awynne.zyre.examples.Chat"
 
 dependencies {
-    compile project(':zyre4j-lib')
+    compile project(':zyre4j-core')
 }
 
 def artifactBase = "${project.name}-${project.version}"
 
 distZip {
     into("${artifactBase}/native") {
-        from "${project(':zyre4j-lib').projectDir}/native"
+        from "${project(':zyre4j-core').projectDir}/native"
     }
 }
 

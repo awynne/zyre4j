@@ -4,7 +4,7 @@ apply plugin: 'application'
 mainClassName = "awynne.zyre.examples.ChatPlus"
 
 dependencies {
-	compile project(':zyre4j-lib')
+	compile project(':zyre4j-core')
 	compile 'commons-collections:commons-collections:3.2.2'
 }
 
@@ -12,7 +12,7 @@ def artifactBase = "${project.name}-${project.version}"
 
 distZip {
     into("${artifactBase}/native") {
-        from "${project(':zyre4j-lib').projectDir}/native"
+        from "${project(':zyre4j-core').projectDir}/native"
     }
 }
 
