@@ -1,0 +1,35 @@
+apply plugin: 'application'
+
+// Main class to run from application start script
+mainClassName = "awynne.zyre.examples.ChatPlus"
+
+dependencies {
+	compile project(':zyre4j-lib')
+	compile 'commons-collections:commons-collections:3.2.2'
+}
+
+def artifactBase = "${project.name}-${project.version}"
+
+distZip {
+    into("${artifactBase}/native") {
+        from "${project(':zyre4j-lib').projectDir}/native"
+    }
+}
+
+
+/*
+ * Modify the start scripts so that we can set the java.library.path
+ * from our custom launcher scripts
+ */
+
+startScripts {
+    doLast {
+        def unixScript = file getUnixScript()
+            unixScript.text = unixScript.text
+            .replace('DEFAULT_JVM_OPTS=\"\"', 'DEFAULT_JVM_OPTS=\"-Djava.library.path=$NATIVE_PATH\"')
+            
+        def winScript = file getWindowsScript() 
+            winScript.text = winScript.text
+            .replace('DEFAULT_JVM_OPTS=', 'DEFAULT_JVM_OPTS=\"-Djava.library.path=%NATIVE_PATH%\"')
+    }
+}

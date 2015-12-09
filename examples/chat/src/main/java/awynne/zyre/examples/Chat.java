@@ -35,8 +35,6 @@ public class Chat extends Thread {
 		node.start();
 		node.join(CHAT_GRP);
 		
-		System.out.println("groups: "+node.ownGroups());
-
 		while(!terminated) {
 			try {
 				ZyreMsg	msg = node.recv();
@@ -78,16 +76,10 @@ public class Chat extends Thread {
 	public static void main(String[] args) throws Exception {
 
 		if (args.length < 1) {
-			out.println("syntax: chat myname | chat myname interface");
+			out.println("syntax: chat myname");
 			exit(0);
 		}
-		Chat chat;
-		if (args.length == 1) {
-			chat = new Chat(args[0]);
-		}
-		else {
-			chat = new Chat(args[0], args[1]);
-		}
+		Chat chat = new Chat(args[0]);
 
 		chat.start();
 		Scanner scanner = new Scanner(in);
