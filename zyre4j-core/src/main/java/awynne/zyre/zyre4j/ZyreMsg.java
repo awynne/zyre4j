@@ -37,9 +37,7 @@ public class ZyreMsg {
 	
 	protected Object payload = null;
 
-	//protected String payload = "";
-	//protected byte[] payloadb = new byte[0];
-	
+	// instantiate different message types with MsgFactory
 	protected ZyreMsg() {
 	}
 

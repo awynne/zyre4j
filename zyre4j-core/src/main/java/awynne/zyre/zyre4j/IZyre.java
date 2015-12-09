@@ -19,7 +19,7 @@ public interface IZyre {
 	/** Start a node to begin discovery and connection process */
 	public boolean start();
 	
-	/** Stop node and close its resources */
+	/** Send stop message, terminate, and close resources */
 	public void stop();
 
 	/** Join the named group */
@@ -28,38 +28,44 @@ public interface IZyre {
 	/** Leave the named group */
 	public void leave(String group);
 	
-	/** Receive a ZyreMsg containing a String payload 
-	 * @throws InterruptedException */
+	/**
+	 *  Receive a ZyreMsg containing a String payload . Each app decides
+	 *  whether to exchange byte[] or String payloads
+	 * @throws InterruptedException if zyre-jni is interrupted during zyre.recv
+	 */
 	public ZyreMsg recv() throws InterruptedException;
 	
-	/** Receive a ZyreMsg containing a byte[] payload 
-	 * @throws InterruptedException */
+	/** 
+	 * Receive a ZyreMsg containing a byte[] payload. Each application decides
+	 * whether it will exchange byte[] or string payloads.
+	 * @throws InterruptedException if zyre-jni is interrupted during zyre.recv
+	 */
 	public ZyreMsg recvb() throws InterruptedException;
 
 	/** 
 	 * Multicast send to the named group 
-	 * @param group
+	 * @param group Group name
 	 * @param payload Payload as string
 	 */
 	public void shout(String group, String payload);
 
 	/**
 	 * Multicast send to the named group
-	 * @param group
+	 * @param group Group name
 	 * @param payload Payload in bytes
 	 */
 	public void shout(String group, byte[] payload);
 	
 	/**
 	 * Unicast send to the peer with the specified ID
-	 * @param peer
+	 * @param peer Peer ID
 	 * @param payload Payload as string
 	 */
 	public void whisper(String peer, String payload);
 	
 	/**
 	 * Unicast send to the peer with the specified ID
-	 * @param peer
+	 * @param peer Peer ID
 	 * @param payload Payload in bytes
 	 */
 	public void whisper(String peer, byte[] payload);
@@ -96,12 +102,32 @@ public interface IZyre {
 	 */
 	public void setInterface(String intf);
 	
+	/**
+	 * Return the IP  address of the specified peer
+	 * @param peer Peer ID
+	 * @return the IP address
+	 */
 	public String peerAddress(String peer);
 	
+	/**
+	 * Return the header value of the specified peer
+	 * @param peer Peer ID
+	 * @param key Key for the particular header
+	 * @return the Value for the specified key
+	 */
 	public String peerHeaderValue(String peer, String key);
 	
+	/**
+	 * Set the header value for this node
+	 * @param key key for the header to set
+	 * @param value value of this header item
+	 */
 	public void setHeader(String key, String value);
 	
+	/**
+	 * Return our UUID, aka Peer ID
+	 * @return
+	 */
 	public String uuid();
 }
 
