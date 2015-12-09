@@ -21,6 +21,9 @@ public class ChatPlus extends Thread {
 
 	public static final String DEFAULT_GRP = "WAITING";
 
+	public static final String SVC_KEY = "service";
+	public static final String SVC_VAL = "chat";
+
 	private ZyreNode node;
 
 	private boolean terminated = false;
@@ -30,6 +33,8 @@ public class ChatPlus extends Thread {
 
 	public ChatPlus(String name) {
 		node = new ZyreNode(name);
+		// use header to advertise capabilities
+		node.setHeader(SVC_KEY, SVC_VAL);
 	}
 
 	public ChatPlus(String name, String intf) {
@@ -61,8 +66,15 @@ public class ChatPlus extends Thread {
 					peers.put(name, peer);
 				}
 				else if (event.equals(EV_JOIN)) { 
-					if (node.ownGroups().contains(group)) {
-						out.printf ("%s has joined room: %s\n", name, group);
+					// notify user that a peer has joined group if this node is in the same group
+					if (node.ownGroups().contains(group)) { 
+						String service = node.peerHeaderValue(peer, SVC_KEY);
+						if (service != null && service.equals(SVC_VAL)) {
+							out.printf ("%s has joined room: %s\n", name, group);
+						}
+						else{
+							err.printf("peer hosts unknown service: " + service);
+						}
 					}
 				}
 				else if (event.equals(EV_LEAVE)) {
