@@ -56,7 +56,7 @@ public class ZyreMsg {
 	public String getPayload() {
 		return (String) payload;
 	}
-	public byte[] getPayloadAsBytes() {
+	public byte[] getPayloadBytes() {
 		return (byte[]) payload;
 	}
 }
