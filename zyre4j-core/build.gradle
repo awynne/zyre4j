@@ -1,6 +1,14 @@
+apply plugin: 'maven-publish'
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
+publishing {
+    publications {
+        localJarPub(MavenPublication) {
+            artifacts {
+                artifact "build/libs/${project.name}-${version}.jar"
+            }
+        }
+    }   
+}
 
 /*
  * Platform labels
